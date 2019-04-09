@@ -6,11 +6,6 @@ Created on Fri Oct 12 11:52:56 2018
 @author: dagasany
 """
 import flopy
-import mps.deesse.deesse as deesse
-import matplotlib.pyplot as plt
-import mps.data.img as img
-import mps.view.imgplot as imgplt
-import mps.view.customcolors as ccol
 import flopy.utils.binaryfile as bf
 import numpy as np
 
