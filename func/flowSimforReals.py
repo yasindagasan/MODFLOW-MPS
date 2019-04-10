@@ -79,7 +79,7 @@ def flowSimforReals (realNum, real, pumpRate=-0.003):
     # Add LPF (Layer Property Flow) package to the MODFLOW model
     lpf_simK = flopy.modflow.ModflowLpf(mf_simK, hk=real.val[realNum,:,:,:], vka=0., ipakcb=53)
     # Write the MODFLOW model input files into the model directory
-    mf_simK.write_input()
+    # mf_simK.write_input()
     success_fw_simK, buff_fw_simK = mf_simK.run_model(silent=True)
     hds = bf.HeadFile(model_ws_simK+"/"+ modelname_simK + '.hds')
     head = hds.get_data(totim=1.0)
