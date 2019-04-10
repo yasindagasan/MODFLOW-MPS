@@ -28,15 +28,15 @@ mf_simK = flopy.modflow.Modflow(modelname=modelname_simK, exe_name=exe_name,
 
 # --------------------
 # Model domain and grid definition
-Lx   =  100. # Length in x direction
-Ly   =  100. # Length in y direction
+Lx   =  128. # Length in x direction
+Ly   =  128. # Length in y direction
 ztop =  0.   # Top elevation of the layer
-zbot = -50.  # Bottom elevation of the layer
+zbot = -1.  # Bottom elevation of the layer
 nlay =  1    # number of layers
-nrow =  100  # number of rows (number of grid nodes in y direction)
-ncol =  100  # number of columns (number of grid nodes in x direction)
-wcol =  50   # x index for the well to discharge or recharge
-wrow =  50   # y index for the well to discharge or recharge
+nrow =  128  # number of rows (number of grid nodes in y direction)
+ncol =  128  # number of columns (number of grid nodes in x direction)
+wcol =  64   # x index for the well to discharge or recharge
+wrow =  64   # y index for the well to discharge or recharge
 
 delr = Lx/ncol # Calculate the length of each grid ALONG the rows
 delc = Ly/nrow # Calculate the length of each grid ALONG the columns
@@ -77,12 +77,14 @@ def flowSimforReals (realNum, real, pumpRate=-0.003):
     # Add PCG (Preconditioned-Conj. Gradient Solver) package to the MODFLOW model
     pcg_simK = flopy.modflow.ModflowPcg(mf_simK) # Solver
 
+    import warnings;
+    warnings.simplefilter('ignore')
 
     # Add LPF (Layer Property Flow) package to the MODFLOW model
     lpf_simK = flopy.modflow.ModflowLpf(mf_simK, hk=real.val[realNum,:,:,:], vka=0., ipakcb=53)
     # Write the MODFLOW model input files into the model directory
     mf_simK.write_input()
-    success_fw_simK, buff_fw_simK = mf_simK.run_model()
+    success_fw_simK, buff_fw_simK = mf_simK.run_model(silent=True)
     hds = bf.HeadFile(model_ws_simK+"/"+ modelname_simK + '.hds')
     head = hds.get_data(totim=1.0)
     if success_fw_simK:
