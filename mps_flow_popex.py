@@ -33,7 +33,6 @@ import flopy.utils.binaryfile as bf
 
 
 import func.flowSimforReals as fwReal
-import func.flowSimforTrue as fwTrue
 
 import flopy
 

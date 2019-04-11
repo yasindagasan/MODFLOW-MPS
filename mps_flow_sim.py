@@ -1,21 +1,5 @@
-#!/usr/bin/python3
-#-*- coding: utf-8 -*-
 
-# At start in the current directory:
-# .
-# |
-# +--pts.gslib      : conditioning points for DeeSse simulation
-# +--test.py        : this file
-# +--ti.gslib       : training image for DeeSse simulation
-#
-# Run this python script in interactive mode (in a python shell):
-# ----
-# with open("test.py") as f: s = f.read()
-#
-# exec(s)
-# ---
 #set_env unine_LICENSE = /home/local/UNINE.CH/dagasany/Documents/PostDoc/Software/DeeSse_Python/
-# Import for the MPS
 #import tkinter
 import numpy as np
 import os 
@@ -33,7 +17,6 @@ import flopy.utils.binaryfile as bf
 
 
 import func.flowSimforReals as fwReal
-import func.flowSimforTrue as fwTrue
 
 import flopy
 
@@ -125,7 +108,7 @@ mf_trueK = flopy.modflow.Modflow(modelname=modelname_trueK, exe_name=exe_name,
 mf_simK = flopy.modflow.Modflow(modelname=modelname_simK, exe_name=exe_name,
                                  model_ws=model_ws_simK)
 
-trueKindex = 4
+trueKindex = 1
 # --------------------
 # Model domain and grid definition
 Lx   =  128. # Length in x direction
@@ -425,5 +408,5 @@ for i in range(6):
     #ccol.add_colorbar(a)
     #plt.title('Heads for #{}'.format(i) )
 plt.tight_layout()    
-plt.savefig('results/plots/flow_simulations_realisations.png')
+plt.savefig('results/plots/flow_simulations_realisations_new.png')
 
