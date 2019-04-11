@@ -1,2 +1,2 @@
 # MODFLOW-MPS
-MPS and flow simulations for GAN training
+MPS and flow simulations for creating a training dataset for GAN
