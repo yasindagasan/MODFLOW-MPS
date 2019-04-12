@@ -4,24 +4,15 @@ import matplotlib.pyplot as plt
 
 # import from package 'geone'
 from geone import img
-import geone.imgplot as imgplt
 import geone.deesseinterface as dsi
 from geone.deesse_core.deesse import MPDS_MISSING_VALUE # constant for missing value
-import os
 import sys
 sys.path.insert(0, '../')
-# import flopy stuff
-import flopy.utils.binaryfile as bf
-
 # import the custom functions
 from func import forward
-# SET THE ENVIRONMENTAL VARIABLE FOR THE ds license
-import os
-# fix below environmental variable workaround permanently!
-# os.environ['unine_LICENSE']='/home/local/UNINE.CH/dagasany/Documents/PostDoc/Software/DeeSse_Python'
+from func import progressBar
 
 
-#%%
 # Read the TI (Img Class)
 ti_filename = 'data/ti_strebelle_K.gslib' # strebelle with K values
 ti = img.readImageGslib(ti_filename, missing_value=MPDS_MISSING_VALUE)
@@ -84,26 +75,6 @@ else:
     trueK = img.readImageGslib(trueK_filename, missing_value=MPDS_MISSING_VALUE)
     simK  = img.readImageGslib(simK_filename, missing_value=MPDS_MISSING_VALUE)
 
-import time, sys
-from IPython.display import clear_output
-
-def update_progress(progress):
-    bar_length = 30
-    if isinstance(progress, int):
-        progress = float(progress)
-    if not isinstance(progress, float):
-        progress = 0
-    if progress < 0:
-        progress = 0
-    if progress >= 1:
-        progress = 1
-
-    block = int(round(bar_length * progress))
-
-    clear_output(wait = True)
-    text = "Progress: [{0}] {1:.1f}%".format( "#" * block + "-" * (bar_length - block), progress * 100)
-    print(text)
-
 if doSimul:
     mf_trueK=forward.Modflow()
     # flow simulation for the reference parameter field
@@ -122,7 +93,7 @@ if doSimul:
         flow_simK.append_var(predSimK[0])
         img.writeImageGslib(flow_simK,
                             filename="results/GSLIB/128*128_non-cond/flowRealisations/flow_%05.d.gslib" % i)
-        update_progress(i / simK.val.shape[0])
+        progressBar.update_progress(i / simK.val.shape[0])
 else:
     flow_trueK_filename = 'results/GSLIB/flow_trueK.gslib'
     flow_simK_filename  = 'results/GSLIB/flow_simK.gslib'
