@@ -7,7 +7,9 @@ from geone import img
 import geone.imgplot as imgplt
 import geone.deesseinterface as dsi
 from geone.deesse_core.deesse import MPDS_MISSING_VALUE # constant for missing value
-
+import os
+import sys
+sys.path.insert(0, '../')
 # import flopy stuff
 import flopy.utils.binaryfile as bf
 
@@ -16,13 +18,25 @@ from func import forward
 # SET THE ENVIRONMENTAL VARIABLE FOR THE ds license
 import os
 # fix below environmental variable workaround permanently!
-os.environ['unine_LICENSE']='/home/local/UNINE.CH/dagasany/Documents/PostDoc/Software/DeeSse_Python'
+# os.environ['unine_LICENSE']='/home/local/UNINE.CH/dagasany/Documents/PostDoc/Software/DeeSse_Python'
 
 
 #%%
 # Read the TI (Img Class)
 ti_filename = 'data/ti_strebelle_K.gslib' # strebelle with K values
 ti = img.readImageGslib(ti_filename, missing_value=MPDS_MISSING_VALUE)
+
+# DeeSse input parameters to create the true K field
+deesse_input_true = dsi.DeesseInput(
+    nx=128,ny=128,nz=1,nv=1,varname='facies',
+    nTI=1,TI=ti,
+    searchNeighborhoodParameters=dsi.SearchNeighborhoodParameters(rx=40.,ry=40.),
+    nneighboringNode=30,
+    distanceThreshold=0.02,
+    maxScanFraction=0.25,
+    npostProcessingPathMax=1,
+    seed=18,
+    nrealization=1)
 
 # DeeSse input parameters to create the realisations for training the ML
 deesse_input_realisations = dsi.DeesseInput(
@@ -42,9 +56,7 @@ wpt = ((64+0.5), 128 - ((64 + 0.5))) # Well location
 trueKList = dsi.deesseRun(deesse_input_true)
 trueK     = trueKList["sim"]
 trueK     = img.gatherImages(trueK,varInd=0)
-# plot the created reference image
-imgplt.drawImage2D(trueK,categCol=col,categ=True,title="Reference")
-plt.plot(wpt[0],wpt[1],'k^:',markersize=12)
+
 # write the reference as a GSLIB file
 img.writeImageGslib(trueK,filename= ("results/GSLIB/128*128/trueK.gslib"))
 
@@ -94,7 +106,7 @@ def update_progress(progress):
 
 if doSimul:
     mf_trueK=forward.Modflow()
-    # flow simulation for the reference parmater field
+    # flow simulation for the reference parameter field
     flow_trueK = img.copyImg(trueK)
     flow_trueK.remove_allvar()
     predTrueK=mf_trueK.predict(model=trueK,imod=0,modelName="forwTrueK")
