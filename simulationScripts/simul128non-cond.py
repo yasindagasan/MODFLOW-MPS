@@ -58,7 +58,7 @@ trueK     = trueKList["sim"]
 trueK     = img.gatherImages(trueK,varInd=0)
 
 # write the reference as a GSLIB file
-img.writeImageGslib(trueK,filename= ("results/GSLIB/128*128/trueK.gslib"))
+img.writeImageGslib(trueK,filename= ("results/GSLIB/128*128_non-cond/trueK.gslib"))
 
 # Do DS simulations to create
 # --------------------
@@ -68,7 +68,7 @@ if doSimul:
     simKList  = dsi.deesseRun(deesse_input_realisations)
     simK      = simKList["sim"]
     simK      = img.gatherImages(simK)
-    img.writeImageGslib(simK,filename= ("results/GSLIB/128*128/simKAll.gslib"))
+    img.writeImageGslib(simK,filename= ("results/GSLIB/128*128_non-cond/simKAll.gslib"))
 
     # Write the simulations in seperate GSLIB files
     for i in range(simK.val.shape[0]):
@@ -76,11 +76,11 @@ if doSimul:
         temp_simK.remove_allvar()
         temp_simK.append_var(simK.val[i,:,:,:])
         img.writeImageGslib(temp_simK,
-                            filename="results/GSLIB/128*128/realisations/real_%05.d.gslib" % i)
+                            filename="results/GSLIB/128*128_non-cond/realisations/real_%05.d.gslib" % i)
 else:
     # Import the fields
-    trueK_filename = 'results/GSLIB/128*128/trueK.gslib'
-    simK_filename  = 'results/GSLIB/128*128/simKAll.gslib'
+    trueK_filename = 'results/GSLIB/128*128_non-cond/trueK.gslib'
+    simK_filename  = 'results/GSLIB/128*128_non-cond/simKAll.gslib'
     trueK = img.readImageGslib(trueK_filename, missing_value=MPDS_MISSING_VALUE)
     simK  = img.readImageGslib(simK_filename, missing_value=MPDS_MISSING_VALUE)
 
@@ -111,7 +111,7 @@ if doSimul:
     flow_trueK.remove_allvar()
     predTrueK=mf_trueK.predict(model=trueK,imod=0,modelName="forwTrueK")
     flow_trueK.append_var(predTrueK[0])
-    img.writeImageGslib(flow_trueK,filename="results/GSLIB/128*128/flow_trueK.gslib" )
+    img.writeImageGslib(flow_trueK,filename="results/GSLIB/128*128_non-cond/flow_trueK.gslib" )
 
     mf_simK=forward.Modflow()
     # flow simulations for realisations
@@ -121,7 +121,7 @@ if doSimul:
         predSimK=mf_simK.predict(model=simK,imod=i,modelName="forwSimK")
         flow_simK.append_var(predSimK[0])
         img.writeImageGslib(flow_simK,
-                            filename="results/GSLIB/128*128/flowRealisations/flow_%05.d.gslib" % i)
+                            filename="results/GSLIB/128*128_non-cond/flowRealisations/flow_%05.d.gslib" % i)
         update_progress(i / simK.val.shape[0])
 else:
     flow_trueK_filename = 'results/GSLIB/flow_trueK.gslib'
