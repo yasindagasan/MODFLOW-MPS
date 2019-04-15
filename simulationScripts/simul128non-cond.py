@@ -39,7 +39,7 @@ deesse_input_realisations = dsi.DeesseInput(
     maxScanFraction=0.25,
     npostProcessingPathMax=1,
     seed=444,
-    nrealization=10)
+    nrealization=700)
 
 # well location
 wpt = ((64+0.5), 128 - ((64 + 0.5))) # Well location
