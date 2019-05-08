@@ -9,7 +9,7 @@ from geone.deesse_core.deesse import MPDS_MISSING_VALUE # constant for missing v
 import sys
 sys.path.insert(0, '../')
 # import the custom functions
-from func import forward
+from func import forward256 as forward
 from func import progressBar
 
 
