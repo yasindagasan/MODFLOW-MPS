@@ -1,0 +1,15 @@
+name: modlfow-mps
+channels:
+  - default
+dependencies:
+  - python=3.8.10
+  - ipython
+  - ipykernel
+  - jupyterlab
+  - pip
+  - pip:
+    - numpy
+    - git+git://github.com/randlab/geone@bd67d3f#egg=geone
+    - pyvista
+    - flopy
+
